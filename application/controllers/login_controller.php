@@ -74,6 +74,9 @@ class login_controller extends CI_Controller
                     'expire' => '0',
                 );
 
+                set_cookie($cookie);
+                
+
                 $cookie= array(
                     'name'   => 'recuerdame',
                     'value'  => 'on',
