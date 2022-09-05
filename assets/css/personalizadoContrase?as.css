@@ -1,0 +1,380 @@
+@media (min-width: 576px) {
+  .gotocontainer {
+    /*max-width: 540px;*/
+      max-width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .gotocontainer {
+    /*max-width: 720px;*/
+      max-width: 100%
+  }
+}
+
+@media (min-width: 992px) {
+  .gotocontainer {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .gotocontainer {
+    max-width: 1140px;
+  }
+}
+
+#header{
+  margin-bottom: 20px;
+}
+
+.btn-gotosystem {
+  color: #fff;
+  background-color: #35cc00;
+  border-color: #35cc00;
+}
+
+.btn-gotosystem:hover {
+  color: #fff;
+  background-color: #1b9306;
+  border-color: #1b9306;
+}
+
+.btn-gotosystem:focus {
+  box-shadow: none;
+}
+
+.btn-filtrar
+{
+    
+    font-size: 16px;
+ 
+}
+
+
+.toggle-gotosystem
+{
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+
+.menu-gotosystem
+{
+    background-color: #35cc00 !important;
+    /*border-radius: 5px;*/    
+    font-weight: 600 !important;
+    padding: 0;
+}
+
+.menu-gotosystem li
+{
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.menu-gotosystem ul li ul li
+{
+  background-color: #35cc00 !important;
+}
+
+.menu-activo
+{
+     background-color: #1b9306 !important;
+}
+
+.menu-gotosystem a
+{
+    color: #FFF !important;
+}
+
+.menu-gotosystem li:hover
+{
+    background-color: #1b9306 !important;
+}
+
+
+.fila-sin-borde th
+{
+    border-top: none;
+}
+
+.tabla-tareas
+{
+    font-size: 1rem;
+    
+}
+
+a
+{
+  text-decoration: none;
+  color: #1b9306;
+    
+}
+
+a:hover
+{
+  color: #35cc00;
+}
+
+.tabla-tareas a
+{
+    text-decoration: none;
+    color: #1b9306;
+    
+}
+
+.tabla-tareas a:hover
+{
+    color: #35cc00;
+}
+
+.form-gotosystem
+{
+    font-size: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.form-gotosystem td
+{
+     padding-right: 10px;
+     padding-top: 4px;
+     padding-bottom: 4px;
+}
+
+.form-gotosystem textarea
+{
+    font-size: 16px;
+    height: 100px;
+}
+
+.editor-gotosystem
+{
+    font-size: 16px;
+}
+
+.editor-gotosystem td
+{
+    height: 40px;
+}
+
+
+.botonEditarMensaje
+{
+  background-image: url(../images/actions/edit.png);
+  background-repeat:no-repeat;
+  width: auto;
+  height: auto;
+  background-position:center;
+  background-color: transparent;
+  border: none;
+  background-size: auto 20px;
+}
+
+.botonBorrarMensaje
+{
+  background-image: url(../images/actions/delete.png);
+  background-repeat:no-repeat;
+  width: 40px;
+  height: auto;
+  background-position:center;
+  background-color: transparent;
+  border: none;
+  background-size: auto 20px;
+}
+
+.enlacesArchivos
+{
+  text-decoration: underline;
+  font-size: 16px;
+}
+
+.enlacesArchivos:hover
+{
+  color: #35cc00;
+}
+
+#archivosTareas ~ .custom-file-label::after {
+    content: "Buscar";
+}
+
+#archivosConocimientos ~ .custom-file-label::after {
+    content: "Buscar";
+}
+
+#tablaMensajes
+{
+  *width: 100%;
+  *table-layout: fixed;
+}
+.mensaje
+{
+  max-width: 20%;
+}
+
+
+/* Base for label styling */
+[type="checkbox"]:not(:checked).checkbox, [type="checkbox"]:checked.checkbox {
+  position: absolute;
+  left: -9999px;
+}
+[type="checkbox"]:not(:checked) + label,
+[type="checkbox"]:checked + label {
+  position: relative;
+  padding-left: 1.95em;
+  cursor: pointer;
+}
+
+/* checkbox aspect */
+[type="checkbox"]:not(:checked) + label:before,
+[type="checkbox"]:checked + label:before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0;
+  width: 1.25em; height: 1.25em;
+  border: 2px solid #C9C8C8;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.0);
+    margin-top: 3px;
+}
+/* checked mark aspect */
+[type="checkbox"]:not(:checked) + label:after,
+[type="checkbox"]:checked + label:after {
+  content: '✔';
+  position: absolute;
+  /*top: .2em; left: .275em;*/
+    top: .2em; left: .100em;
+  font-size: 1.4em;
+  line-height: 0.8;
+  color: #1b9306;
+  transition: all .2s;
+  font-family: Helvetica, Arial, sans-serif;
+}
+/* checked mark aspect changes */
+[type="checkbox"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+[type="checkbox"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+/* disabled checkbox */
+[type="checkbox"]:disabled:not(:checked) + label:before,
+[type="checkbox"]:disabled:checked + label:before {
+  box-shadow: none;
+  border-color: #C9C8C8;
+  background-color: #ddd;
+}
+[type="checkbox"]:disabled:checked + label:after {
+  color: #999;
+}
+[type="checkbox"]:disabled + label {
+  color: #aaa;
+}
+/* accessibility */
+[type="checkbox"]:checked:focus + label:before
+{
+    border: 2px solid #1b9306;
+    
+}
+[type="checkbox"]:checked + label:before {
+   border: 2px solid #1b9306;
+}
+
+[type="checkbox"]:not(:checked):focus + label:before {
+  border: 2px solid #C9C8C8;
+}
+
+/* hover style just for information */
+label:hover:before {
+  border: 2px solid #1b9306!important;
+}
+
+
+
+.btn-group > .btn, .btn-group-vertical > .btn {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    border: 1px solid #ced4da;
+}
+
+/*checkboxpersonalizado*/
+
+/*.checkboxpersonalizado label:after, 
+.radio label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkboxpersonalizado .cr,
+.radio .cr {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #a9a9a9;
+    border-radius: .25em;
+    width: 1.3em;
+    height: 1.3em;
+    float: left;
+    margin-right: .5em;
+}
+
+.radio .cr {
+    border-radius: 50%;
+}
+
+.checkboxpersonalizado .cr .cr-icon,
+.radio .cr .cr-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+    top: 50%;
+    left: 20%;
+}
+
+.radio .cr .cr-icon {
+    margin-left: 0.04em;
+}
+
+.checkboxpersonalizado label input[type="checkbox"],
+.radio label input[type="radio"] {
+    display: none;
+}
+
+.checkboxpersonalizado label input[type="checkbox"] + .cr > .cr-icon,
+.radio label input[type="radio"] + .cr > .cr-icon {
+    transform: scale(3) rotateZ(-20deg);
+    opacity: 0;
+    transition: all .3s ease-in;
+}
+
+.checkboxpersonalizado label input[type="checkbox"]:checked + .cr > .cr-icon,
+.radio label input[type="radio"]:checked + .cr > .cr-icon {
+    transform: scale(1) rotateZ(0deg);
+    opacity: 1;
+}
+
+.checkboxpersonalizado label input[type="checkbox"]:disabled + .cr,
+.radio label input[type="radio"]:disabled + .cr {
+    opacity: .5;
+}*/
+.dont-break-out {
+  /* These are technically the same, but use both */
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
