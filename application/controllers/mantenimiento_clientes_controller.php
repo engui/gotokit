@@ -28,15 +28,26 @@ class mantenimiento_clientes_controller extends CI_Controller
     public function insertarCliente()
     {
     	$data['nombre'] = $this->input->post('nombre');
-    	$data['color'] = $this->input->post('color');
-    	$this->clientes_model->insertarCliente($data);
+    	$data['telefono'] = $this->input->post('telefono');
+        $data['direccion'] = $this->input->post('direccion');
+        $data['cp'] = $this->input->post('cp');
+        $data['poblacion'] = $this->input->post('poblacion');
+        $data['provincia'] = $this->input->post('provincia');
+        $data['pais'] = $this->input->post('pais');
+    	$id = $this->clientes_model->insertarCliente($data);
+        echo $id;
     }
 
     public function modificarCliente()
     {
     	$data['cod_cliente'] = $this->input->post('cod_cliente');
     	$data['nombre'] = $this->input->post('nombre');
-    	$data['color'] = $this->input->post('color');
+    	$data['telefono'] = $this->input->post('telefono');
+        $data['direccion'] = $this->input->post('direccion');
+        $data['cp'] = $this->input->post('cp');
+        $data['poblacion'] = $this->input->post('poblacion');
+        $data['provincia'] = $this->input->post('provincia');
+        $data['pais'] = $this->input->post('pais');
     	$this->clientes_model->modificarCliente($data);
     }
 
@@ -45,6 +56,8 @@ class mantenimiento_clientes_controller extends CI_Controller
     	$data['cod_cliente'] = $this->input->post('cod_cliente');
     	$this->clientes_model->eliminarCliente($data);
     }
+
+    
 }
 
 ?>

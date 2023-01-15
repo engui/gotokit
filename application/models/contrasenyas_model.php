@@ -8,6 +8,8 @@ class contrasenyas_model extends CI_Model
 
     	$contraseñas=$query->result_array();
         $num_contraseñas=$query->num_rows();
+
+        if (sizeof($contraseñas)==0) return [];
         
         $lista_contraseñas=array($num_contraseñas);
         

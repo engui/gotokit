@@ -12,11 +12,36 @@ class vertarea_controller extends CI_Controller
         $this->load->model('estados_model');
         $this->load->model('clientes_model');
         $this->load->model('archivos_model');
+        $this->load->helper('ics');
         //$this->load->library('encrypt');
         //$this->load->library('session');
         $this->output->nocache();
     }
-    
+
+    public function generar_ics()
+    {
+        $cod_tarea = $this->input->post('cod_tarea');
+        $fecha_inicial = $this->input->post('fecha');
+        $titulo = $this->input->post('titulo');
+        $url = base_url()."/tarea/".$cod_tarea;
+        $event = new ICS($fecha_inicial,$titulo ,$url,"Eventos");
+        $event->show();
+    }
+
+    /*public function generar_ics($cod_tarea)
+    {
+        $tarea = $this->tareas_model->mostrarTarea($cod_tarea);
+
+      
+
+        $fecha_inicial = $tarea->fecha_limite;
+        $titulo = $tarea->nombre;
+        $url = base_url()."/tarea/".$cod_tarea;
+        $event = new ICS($fecha_inicial,$titulo ,$url,"España");
+        $event->show();
+        return;
+    }*/
+
     public function mostrarTarea($cod_tarea)
     {
         if($this->session->userdata('cod_usuario')=='')
@@ -92,7 +117,10 @@ class vertarea_controller extends CI_Controller
             $mensaje_tarea=$this->input->post('content');
             $tiempo_horas=$this->input->post('tiempo_horas');
             $tiempo_minutos=$this->input->post('tiempo_minutos');
-            
+            $fecha_tarea = $this->input->post('fechaTarea');
+            $nombre_tarea = $this->input->post('nombreTarea');
+
+            $clientes_tarea=$this->input->post('clientesTarea');;
             
             if($mensaje_tarea!='')
             {
@@ -102,6 +130,8 @@ class vertarea_controller extends CI_Controller
                 $param['mensaje_tarea']=$mensaje_tarea;
                 $param['tiempo_horas']=$tiempo_horas;
                 $param['tiempo_minutos']=$tiempo_minutos;
+                $param['fecha_tarea']=$fecha_tarea;
+                
                 
                 $this->tareas_model->nuevoMensaje($param);
                 //*******************************************************************
@@ -160,6 +190,31 @@ class vertarea_controller extends CI_Controller
                     //$ficheros[$i+1] = $cod_tarea;
                 }
                 $this->tareas_model->anyadirArchivosMensajes($ficheros,$cod_tarea);
+
+                if ($fecha_tarea!="")
+                {
+                    $ruta = 'archivosIcs//'.$cod_tarea.'//';
+                    if (!file_exists($ruta)) 
+                    {
+                        mkdir($ruta, 0777, true);
+                    }
+                    $str_clientes = " (";
+                    foreach ($clientes_tarea as $cliente)
+                    {
+                        $str_clientes.=$this->tareas_model->obtenerNombreCliente($cliente).", ";
+                    }
+                    $str_clientes .= ")";
+                    $str_clientes = str_replace(" ()","",$str_clientes);
+                    $str_clientes = str_replace(", )",")",$str_clientes);
+
+                    $fecha_inicial=$fecha_tarea;
+                    $titulo = $nombre_tarea.$str_clientes;
+                    $url = base_url().'tarea/'.$cod_tarea;
+                    $event = new ICS($fecha_inicial,$titulo ,$url,"Eventos");
+
+                    file_put_contents($ruta."tarea$cod_tarea.ics",$event->data);
+
+                }
 
                 //*******************************************************************
             }
@@ -221,6 +276,7 @@ class vertarea_controller extends CI_Controller
         $clientes_tarea=$this->input->post('clientesTarea');
         $usuario_tarea=$this->input->post('usuarioTarea');
         $prioridad=$this->input->post('prioridad');
+        $usuario_activo = $this->input->post('usuarioActivo');
         
         $tiempo_principal_horas=$this->input->post('tiempo_principal_horas');
         $tiempo_principal_minutos=$this->input->post('tiempo_principal_minutos');
@@ -235,8 +291,34 @@ class vertarea_controller extends CI_Controller
         $param['usuario_tarea']=$usuario_tarea;
         $param['prioridad']=$prioridad;
         $param['minutos']=$minutos_principal;
+        $param['usuario_activo']=$usuario_activo;
 
         $cod_tarea=$this->tareas_model->actualizarTarea($param);
+
+        if ($fecha_tarea!="")
+                {
+                    $ruta = 'archivosIcs//'.$cod_tarea.'//';
+                    if (!file_exists($ruta)) 
+                    {
+                        mkdir($ruta, 0777, true);
+                    }
+                    $str_clientes = " (";
+                    foreach ($clientes_tarea as $cliente)
+                    {
+                        $str_clientes.=$this->tareas_model->obtenerNombreCliente($cliente).", ";
+                    }
+                    $str_clientes .= ")";
+                    $str_clientes = str_replace(" ()","",$str_clientes);
+                    $str_clientes = str_replace(", )",")",$str_clientes);
+
+                    $fecha_inicial=$fecha_tarea;
+                    $titulo = $nombre_tarea.$str_clientes;
+                    $url = base_url().'tarea/'.$cod_tarea;
+                    $event = new ICS($fecha_inicial,$titulo ,$url,"eventos");
+
+                    file_put_contents($ruta."tarea$cod_tarea.ics",$event->data);
+
+                }
 
 //        redirect('/inicio');
     }

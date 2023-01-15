@@ -36,6 +36,14 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+define('VERSION_GOTOAGENDA', '1.5.0');
+
+defined('COPIA_COMANDO')     OR    define('COPIA_COMANDO', '/usr/local/bin/mysqldump -n -l -h');
+defined('COPIA_HOST')     OR    define('COPIA_HOST', 'localhost');
+defined('COPIA_USER')     OR    define('COPIA_USER', 'gotoagenda_bd');
+defined('COPIA_PASSWORD')     OR    define('COPIA_PASSWORD', 'ChPjzuT4');
+defined('COPIA_DB')     OR    define('COPIA_DB', 'gotoagenda_bd');
+defined('COPIA_ZIP') OR    define('COPIA_ZIP', 'zip -r');
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

@@ -16,7 +16,7 @@ include 'includes/headerConocimientos.php';
 	</thead>
 	<tbody>
 		<?php
-			foreach($conocimientos as $conocimiento)
+        	foreach($conocimientos as $conocimiento)
             {
             	$cod_conocimiento=$conocimiento['cod_conocimiento'];
             	$nombre=$conocimiento['nombre'];
@@ -113,7 +113,7 @@ $(document).ready(function() {
             "sProcessing":     "Procesando...",
             "sLengthMenu":     "Mostrar _MENU_ registros",
             "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
             "sInfo":           "Registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty":      "Registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",

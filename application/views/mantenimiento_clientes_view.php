@@ -14,7 +14,7 @@ include 'includes/headerMantenimiento.php';
             	<tr>
             		<td>
             			<select name="clienteConocimiento[]" id="menuClientes" onchange="myFunction()">
-                            <option selected value="defecto" id="defecto"> -- Selecciona un Cliente -- </option>
+                            
                       <?php
                         foreach($clientes as $cliente)
                         {
@@ -40,10 +40,37 @@ include 'includes/headerMantenimiento.php';
             		<td>Nombre:</td>
             		<td colspan="2"><input class="form-control" type="text" name="nombreCliente" id="nombreCliente"></td>
             	</tr>
-            	<tr>
+                <tr>
+            		<td>Teléfono:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="telefonoCliente" id="telefonoCliente"></td>
+            	</tr>
+                <tr>
+            		<td>Dirección:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="direccionCliente" id="direccionCliente"></td>
+            	</tr>
+                <tr>
+            		<td>Código Postal:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="cpCliente" id="cpCliente"></td>
+            	</tr>
+                <tr>
+            		<td>Población:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="poblacionCliente" id="poblacionCliente"></td>
+            	</tr>
+                <tr>
+            		<td>Provincia:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="provinciaCliente" id="provinciaCliente"></td>
+            	</tr>
+                <tr>
+            		<td>País:</td>
+            		<td colspan="2"><input class="form-control" type="text" name="paisCliente" id="paisCliente"></td>
+            	</tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+            	<!--<tr>
             		<td>Color:</td>            		
             		<td colspan="2"><input class="form-control" type="text" id="colorCliente" name="colorCliente" value="#" onblur="evitarVacio()" /><div id="colorpicker" style="color: #000000"></div></td>
-            	</tr>
+            	</tr>-->
                 <tr>
                     <td id="celdaBotonInsertar" colspan="2"><input type="button" name="Insertar" value="Insertar" id="Insertar" class="btn btn-lg btn-gotosystem btn-block" onclick="insertarCliente()"></td>
                     <td colspan="2" id="celdaBotonModificar" style="display: none;"><input type="button" name="Modificar" value="Modificar" id="Modificar" class="btn btn-lg btn-gotosystem btn-block" onclick="modificarCliente()"></td>
@@ -55,14 +82,25 @@ include 'includes/headerMantenimiento.php';
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#menuClientes').multiselect({
+		
+        /*$('#menuClientes').multiselect({
 			enableFiltering: true,
 			enableCaseInsensitiveFiltering: true,
 			numberDisplayed: 3,
 			nonSelectedText: 'Selecciona los clientes',
 			buttonWidth: '300px'
-		});
-		var x = document.getElementsByClassName("multiselect-search");
+		});*/
+
+        $('#menuClientes').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Selecciona cliente',
+            width: '100%' 
+        });
+
+        $("#menuClientes").val("")
+        $("#menuClientes").trigger("change");
+		
+        var x = document.getElementsByClassName("multiselect-search");
 		var buscador = x[0];
 		buscador.placeholder = "Buscar"; 
 	});
@@ -90,6 +128,11 @@ function volver()
     $('#volver').hide();  
 
     $('#nombreCliente').val("");
+    $('#telefonoCliente').val("");
+    $('#direccionCliente').val("");
+    $('#cpCliente').val("");
+    $('#poblacionCliente').val("");
+    $('#provinciaCliente').val("");
     $('#colorCliente').val("#");
 
     
@@ -97,6 +140,9 @@ function volver()
 
 function myFunction()
 {
+    var x = document.getElementById("menuClientes").value;
+    if (x=="") exit;
+
     $('#celdaBotonModificar').show();
     $('#celdaBotonInsertar').hide();
     $('#celdaBotonBorrar').show();
@@ -104,8 +150,7 @@ function myFunction()
 
     
 
-	var x = document.getElementById("menuClientes").value;
-    //document.getElementById("nombreCliente").value = "a";
+	//document.getElementById("nombreCliente").value = "a";
 	$.ajax({
         type:"POST",
         dataType: 'json',
@@ -115,9 +160,15 @@ function myFunction()
         {
             //window.location.reload();
             document.getElementById("nombreCliente").value = datos[0]["nombre"];
-            document.getElementById("colorCliente").value = datos[0]["color"];
-            $("#colorCliente").css("background-color", datos[0]["color"]);
-            $.farbtastic('#colorpicker').setColor(datos[0]["color"]);
+            document.getElementById("telefonoCliente").value = datos[0]["telefono"];
+            document.getElementById("direccionCliente").value = datos[0]["direccion"];
+            document.getElementById("cpCliente").value = datos[0]["cp"];
+            document.getElementById("poblacionCliente").value = datos[0]["poblacion"];
+            document.getElementById("provinciaCliente").value = datos[0]["provincia"];
+            document.getElementById("paisCliente").value = datos[0]["pais"];
+            //document.getElementById("colorCliente").value = datos[0]["color"];
+            //$("#colorCliente").css("background-color", datos[0]["color"]);
+            //$.farbtastic('#colorpicker').setColor(datos[0]["color"]);
         }
     });
 }
@@ -126,13 +177,19 @@ function insertarCliente()
 {
     var cod_cliente = document.getElementById("menuClientes").value;
     var nombre = $("#nombreCliente").val();
-    var color = $("#colorCliente").val();
-    if(nombre != "" && color.length == 7)
+    var telefono = $("#telefonoCliente").val();
+    var direccion = $("#direccionCliente").val();
+    var cp = $("#cpCliente").val();
+    var poblacion = $("#poblacionCliente").val();
+    var provincia = $("#provinciaCliente").val();
+    var pais = $("#paisCliente").val();
+    //var color = $("#colorCliente").val();
+    if(nombre != "")
     {
         $.ajax({
             type:"POST",
             url:"<?php echo base_url(); ?>mantenimiento_clientes_controller/insertarCliente",
-            data: {nombre:nombre,color:color},
+            data: {nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais:pais},
             success: function()
             {
                 //window.location.reload();
@@ -143,8 +200,7 @@ function insertarCliente()
                     timer: 1500
                 })
                 setTimeout("location.reload()",1500);
-                $('#nombreCliente').val("");
-                $('#colorCliente').val("#");
+                
             }
         }); 
     }
@@ -153,7 +209,7 @@ function insertarCliente()
         Swal.fire({
           type: 'error',
           title: 'Error al insertar',
-          text: 'El cliente necesita un nombre y/o el color no es correcto'
+          text: 'El cliente necesita un nombre'
         })
     }
 }
@@ -163,21 +219,26 @@ function modificarCliente()
     var mensajeError = '';
     var cod_cliente = document.getElementById("menuClientes").value;
     var nombre = $("#nombreCliente").val();
-    var color = $("#colorCliente").val();
+    var telefono = $("#telefonoCliente").val();
+    var direccion = $("#direccionCliente").val();
+    var cp = $("#cpCliente").val();
+    var poblacion = $("#poblacionCliente").val();
+    var provincia = $("#provinciaCliente").val();
+    var pais = $("#paisCliente").val();
     if(nombre == "")
     {
         mensajeError += 'Se necesita un nombre para el usuario.<br>';
     }
-    if(color.length != 7)
+    /*if(color.length != 7)
     {
         mensajeError += 'El color especificado no es correcto.<br>';
-    }
+    }*/
     if(cod_cliente != "defecto")
     {
         $.ajax({
             type:"POST",
             url:"<?php echo base_url(); ?>mantenimiento_clientes_controller/modificarCliente",
-            data: {cod_cliente:cod_cliente,nombre:nombre,color:color},
+            data: {cod_cliente:cod_cliente,nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais: pais},
             success: function()
             {
                 if(mensajeError != '')
@@ -197,10 +258,9 @@ function modificarCliente()
                         showConfirmButton: false,
                         timer: 1500
                     })
+                    
+                    
                     setTimeout("location.reload()",1500);
-                    $('#nombreCliente').val("");
-                    $('#colorCliente').val("#");
-                    $("#menuClientes").val("defecto");
                 }
             },
             error: function()
@@ -253,8 +313,8 @@ function eliminarCliente()
                         })
                         //window.location.reload();
                         setTimeout("location.reload()",1500);
-                        $('#nombreCliente').val("");
-                        $('#colorCliente').val("#");
+                        //$('#nombreCliente').val("");
+                        //$('#colorCliente').val("#");
                         /*$("#defecto").prop("disabled",false);
                         $("#defecto").prop("disabled",true);*/
                     },

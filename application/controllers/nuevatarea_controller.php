@@ -9,6 +9,7 @@ class nuevatarea_controller extends CI_Controller
         parent::__construct();
         $this->load->model('tareas_model');
         $this->load->model('usuarios_model');
+        $this->load->helper('ics');
         //$this->load->library('encrypt');
         //$this->load->library('session');
         $this->output->nocache();
@@ -53,6 +54,8 @@ class nuevatarea_controller extends CI_Controller
         $facturable_tarea=$this->input->post('facturable');
         $tiempo_horas=$this->input->post('tiempo_horas');
         $tiempo_minutos=$this->input->post('tiempo_minutos');
+        $usuario_activo = $this->input->post('usuario_activo');
+
         
         
         if($nombre_tarea=='' || $usuario_tarea=='' /*|| $fecha_tarea=='' || $hora_tarea==''*/)
@@ -103,9 +106,10 @@ class nuevatarea_controller extends CI_Controller
             $param['prioridad_tarea']=$prioridad_tarea;
             $param['facturable_tarea']=$facturable_tarea;
             $param['minutos']=($tiempo_horas*60)+($tiempo_minutos);
+            $param['usuario_activo'] = $usuario_activo;
 
             
-            $this->tareas_model->nuevaTarea($param);
+            $ultimoCodTarea = $this->tareas_model->nuevaTarea($param);
             //*******************************************************************
             //*******************************************************************************
 
@@ -128,8 +132,7 @@ class nuevatarea_controller extends CI_Controller
                         $_FILES['file']['error'] = $_FILES['files']['error'][$i];
                         $_FILES['file']['size'] = $_FILES['files']['size'][$i];
 
-                        $ultimoCodTarea = $this->tareas_model->obtenerUltimaTareaCreada();
-
+                        
                         $ruta = 'uploads//'.$ultimoCodTarea.'//';
                         if (!file_exists($ruta)) 
                         {
@@ -167,6 +170,33 @@ class nuevatarea_controller extends CI_Controller
             $this->tareas_model->anyadirArchivosNuevaTarea($ficheros);
             //*******************************************************************************
             //*******************************************************************
+
+            if ($fecha_tarea!="")
+            {
+                $ruta = 'archivosIcs//'.$ultimoCodTarea.'//';
+                if (!file_exists($ruta)) 
+                {
+                    mkdir($ruta, 0777, true);
+                }
+
+                $str_clientes = " (";
+                foreach ($clientes_tarea as $cliente)
+                {
+                    $str_clientes.=$this->tareas_model->obtenerNombreCliente($cliente).", ";
+                }
+                $str_clientes .= ")";
+                $str_clientes = str_replace(" ()","",$str_clientes);
+                $str_clientes = str_replace(", )",")",$str_clientes);
+
+                $fecha_inicial=$fecha_tarea;
+                $titulo = $nombre_tarea.$str_clientes;
+                $url = base_url().'tarea/'.$ultimoCodTarea;
+                $event = new ICS($fecha_inicial,$titulo ,$url,"Eventos");
+
+                file_put_contents($ruta."tarea$ultimoCodTarea.ics",$event->data);
+            }
+            
+
             $mensaje_confirmacion='✔ Nueva Tarea añadida correctamente';
             
             
@@ -176,7 +206,9 @@ class nuevatarea_controller extends CI_Controller
             $this->session->set_userdata('opcion_menu',$opcion_menu);
             $this->session->set_userdata('titulo_pagina','Inicio');
       
+
             redirect('inicio');
+            
             //$this->load->view('inicio_view',$data);
             //redirect('inicio');
         }

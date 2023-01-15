@@ -9,10 +9,11 @@ class conocimientos_model extends CI_Model
     	$conocimientos=$query->result_array();
         $num_conocimientos=$query->num_rows();
         
-        $lista_conocimientos=array($num_conocimientos);
-        
-        $contador=0;
+        if (sizeof($conocimientos)==0) return [];
 
+        $lista_conocimientos=array($num_conocimientos);
+        $contador=0;
+        
         foreach($conocimientos as $conocimiento)
         {
         	$cod_conocimiento = $conocimiento['cod_conocimiento'];

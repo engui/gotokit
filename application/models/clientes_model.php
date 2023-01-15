@@ -13,7 +13,7 @@ class clientes_model extends CI_Model
 
     public function obtenerClientePorID($id_cliente)
     {
-        $query = $this->db->query('select nombre,color from clientes where id='.$id_cliente);
+        $query = $this->db->query('select * from clientes where id='.$id_cliente);
         $datosClientes = $query->result_array();
 
         return $datosClientes;
@@ -47,9 +47,15 @@ class clientes_model extends CI_Model
     {
         $campos=array(
             'nombre' => $data['nombre'],
-            'color' => $data['color']
+            'telefono' => $data['telefono'],
+            'direccion' => $data['direccion'],
+            'cp' => $data['cp'],
+            'poblacion' => $data['poblacion'],
+            'provincia' => $data['provincia'],
+            'pais' => $data['pais']
         );
         $this->db->insert('clientes',$campos);   
+        return $this->db->insert_id();
     }
 
     public function modificarCliente($data)
@@ -57,7 +63,12 @@ class clientes_model extends CI_Model
         //$query = $this->db->query('UPDATE clientes SET nombre = '.$data['nombre'].', color = '.$data['color'].' WHERE id = '.$data['cod_cliente']);
         //$this->db->delete('clientes', array('cod_cliente' => $data['cod_cliente']));
         $this->db->set('nombre', $data['nombre']);
-        $this->db->set('color', $data['color']);
+        $this->db->set('telefono', $data['telefono']);
+        $this->db->set('direccion', $data['direccion']);
+        $this->db->set('cp', $data['cp']);
+        $this->db->set('poblacion', $data['poblacion']);
+        $this->db->set('provincia', $data['provincia']);
+        $this->db->set('pais', $data['pais']);
         $this->db->where('id', $data['cod_cliente']);
         $this->db->update('clientes'); // gives UPDATE mytable SET field = field+1 WHERE id = 2
     }

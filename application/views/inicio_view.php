@@ -166,7 +166,16 @@ include 'includes/header.php';
                     $colorClientes=$tarea['colorClientes'];
                     $prioridad=$tarea['prioridad'];
                     $noleidos=$tarea['noleidos'];
+                    $usuario_activo=$tarea['usuario_activo'];
+                    $borde_usuario = $tarea['borde_para'];
                     
+                    $nombre_clientes="";
+                    foreach ($clientes as $cliente)
+                    {
+                      $nombre_clientes.="<div class='pildoracliente'>".$cliente."</div>";
+                    }
+                    
+
                     $date = DateTime::createFromFormat( 'Y-m-d', $fecha_creada);
                     $fecha_creada_formateada = $date->format('d-m-Y');
             
@@ -201,11 +210,12 @@ include 'includes/header.php';
                     if ($noleidos==0)  $fondo=" transparent ";
                     
                     echo '<th class="text-center align-middle" style="color:white;background-color:'.$fondo.'">'.$noleidos.'</th>';
-                    echo '<th class="align-middle" scope="row"><a href="'.base_url().'tarea/'.$cod_tarea.'">'.$nombre_tarea.'</a></th>';
+                    echo '<th class="align-middle" scope="row">'.$nombre_clientes.'<a href="'.base_url().'tarea/'.$cod_tarea.'">'.$nombre_tarea.'</a></th>';
                     echo '<td class="text-center align-middle" >';
                     for ($i=0; $i <count($para_tarea) ; $i++) 
                     {
-                      echo '<span  style="display:inline-block;width:90%;font-weight: 600; background-color: '.$color_usuario[$i].'; color: #FFF; border-radius: 5px; padding-right: 5px; padding-left: 5px;margin-top:1px;margin-bottom:1px">'.$para_tarea[$i].'</span><br>';
+                      $borde = $borde_usuario[$i];  
+                      echo '<span  style="'.$borde.' display:inline-block;width:90%;font-weight: 600; background-color: '.$color_usuario[$i].'; color: #FFF; border-radius: 5px; padding-right: 5px; padding-left: 5px;margin-top:1px;margin-bottom:1px">'.$para_tarea[$i].'</span><br>';
                     }
                     echo "</td>";
                     echo '<td class="text-center align-middle" style="display: none;">';
@@ -371,7 +381,7 @@ $.fn.DataTable.ext.type.search['html'] = function(data) {
             "sProcessing":     "Procesando...",
             "sLengthMenu":     "Mostrar _MENU_ registros",
             "sZeroRecords":    "No se encontraron resultados",
-            "sEmptyTable":     "Ningún dato disponible en esta tabla =(",
+            "sEmptyTable":     "Ningún dato disponible en esta tabla",
             "sInfo":           "Registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty":      "Registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",

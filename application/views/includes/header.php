@@ -177,9 +177,21 @@
           </li>
         </ul>
       </li>       
+      <?php
+        if($this->session->userdata('super')==1) 
+        {
+      ?>
+      
+      <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url(); ?>configuracion">Configuración</a>
+          </li>
+          <?php 
+        }
+      ?>
       <li class="nav-item px-2">
           <a class="nav-link" href="<?php echo base_url(); ?>cerrar-sesion">Cerrar Sesión</a>
       </li> 
+
     </ul>
     
   </div>

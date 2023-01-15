@@ -14,6 +14,15 @@ class usuarios_model extends CI_Model
         return $usuarios;
     }
 
+    public function getCantUsuariosActivos()
+    {
+        $this->db->select('COUNT(*) as cant')
+                 ->from('usuarios')
+                 ->where('activo',1);
+        $query = $this->db->get();
+        return $query->row()->cant;
+    }
+
     public function obtenerTodosUsuarios()
     {
         $query = $this->db->query('SELECT * FROM usuarios');

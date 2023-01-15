@@ -16,6 +16,9 @@
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/bootstrap/css/bootstrap.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/fontawesome/css/fontawesome.css">
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/fontawesome/css/fontawesome.min.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/select2/css/select2.min.css">
+        <link rel="stylesheet" href="<?php echo base_url(); ?>assets/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+        <script src='<?php echo base_url(); ?>assets/select2/js/select2.js'></script>
         
         <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/personalizadoConocimientos.css">
         <!--<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/searchBar.css">-->
@@ -110,11 +113,13 @@
           <?php 
             }
           ?>
-          <li class="nav-item px-2">
-            <a class="nav-link" href="<?php echo base_url(); ?>calendario-tareas">Calendario</a>
-          </li>
+          
         </ul>
       </li> 
+      <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url(); ?>calendario-tareas">Calendario</a>
+          </li>
+
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Base Conocimiento<span class="caret"></span></a>
         <ul class="dropdown-menu">
@@ -165,6 +170,18 @@
           </li>
         </ul>
       </li>         
+      <?php
+        if($this->session->userdata('super')==1) 
+        {
+      ?>
+      
+      <li class="nav-item">
+            <a class="nav-link" href="<?php echo base_url(); ?>configuracion">Configuración</a>
+          </li>
+          <?php 
+        }
+      ?>
+      
       <li class="nav-item px-2">
           <a class="nav-link" href="<?php echo base_url(); ?>cerrar-sesion">Cerrar Sesión</a>
       </li> 

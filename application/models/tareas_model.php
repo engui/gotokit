@@ -35,16 +35,16 @@ class tareas_model extends CI_Model
             
             if($mostrar_todos!=0)
             {
-                $query = $this->db->query('select DISTINCT T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,T.prioridad FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea order by T.fecha_mod DESC, T.hora_mod DESC,FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
+                $query = $this->db->query('select DISTINCT T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,T.prioridad,T.usuario_activo FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea order by T.fecha_mod DESC, T.hora_mod DESC,FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
             }
             else
             {
-                $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos  FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' order by T.fecha_mod DESC, T.hora_mod DESC,FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
+                $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,T.usuario_activo, R.noleidos  FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' order by T.fecha_mod DESC, T.hora_mod DESC,FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
             }
         }
         else
         {
-            $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' order by T.fecha_mod DESC, T.hora_mod DESC, FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
+            $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos, T.usuario_activo FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' order by T.fecha_mod DESC, T.hora_mod DESC, FIELD(estado,2,1,3),FIELD(prioridad,"ALTA","MEDIA","BAJA")');
         }
 
         $tareas=$query->result_array();
@@ -65,6 +65,7 @@ class tareas_model extends CI_Model
             $estado=$tarea['estado'];
             $usuario_origen=$tarea['usuario_origen'];
             $prioridad = $tarea['prioridad'];
+            $usuario_activo = $tarea['usuario_activo'];
             if (isset($tarea['noleidos'])) $noleidos = $tarea['noleidos'];
             else
             {
@@ -92,10 +93,16 @@ class tareas_model extends CI_Model
             //************************************************************************
             $array_nombre_para = array();
             $array_color_para = array();
+            $array_borde_para = array();
             foreach ($array_usuarios as $usuario_destino) 
             {          
                 if($usuario_destino['usuario_destino']!=0)
                 {
+                    $borde = "";
+                    if ($usuario_activo==$usuario_destino['usuario_destino'])
+                    {
+                        $borde = " border:4px solid black;";
+                    }
                     $consulta_para=$this->db->query('SELECT * FROM usuarios WHERE cod_usuario='.$usuario_destino['usuario_destino']);
                     $fila_para=$consulta_para->row();
 
@@ -103,7 +110,8 @@ class tareas_model extends CI_Model
                     $array_nombre_para[] = $fila_para->nombre;
                     //$color_para=$fila_para->color_usuario;
                     $array_color_para[] = $fila_para->color_usuario;
-
+                    $array_borde_para[] = $borde;
+ 
                 }
             }
 
@@ -147,11 +155,11 @@ class tareas_model extends CI_Model
                     'clientes' => $array_clientes_nombre,
                     'colorClientes' => $array_clientes_color,
                     'prioridad' => $prioridad,
-                    'noleidos' => $noleidos
+                    'noleidos' => $noleidos,
+                    'usuario_activo' => $usuario_activo,
+                    'borde_para' => $array_borde_para
                     //'nombre_para' => $nombre_para,
                     //'color_para' => $color_para
-                    
-            
             );
                 
             $contador++;
@@ -292,18 +300,18 @@ class tareas_model extends CI_Model
             
             if($mostrar_todos!=0)
             {
-                $query = $this->db->query('select DISTINCT T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,T.prioridad FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
+                $query = $this->db->query('select DISTINCT T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,T.prioridad, T.usuario_activo FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
             }
             else
             {
-                $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos  FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
+                $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos, T.usuario_activo  FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
             }
             
             
         }
         else
         {
-            $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
+            $query = $this->db->query('select T.cod_tarea,T.fecha_creada,T.hora_creada,T.fecha_aceptada,T.hora_aceptada,T.fecha_mod,T.hora_mod,T.fecha_completa,T.hora_completa,T.fecha_limite,T.hora_limite,T.nombre,T.estado,T.usuario_origen,R.usuario_destino,T.prioridad,R.noleidos, T.usuario_activo FROM tareas T,reltareausuariodest R WHERE T.cod_tarea = R.cod_tarea AND R.usuario_destino = '.$cod_usuario.' AND T.estado = '.$estado.' order by T.fecha_mod DESC, T.hora_mod DESC');
         }
       
       
@@ -326,6 +334,7 @@ class tareas_model extends CI_Model
             $estado=$tarea['estado'];
             $usuario_origen=$tarea['usuario_origen'];
             $prioridad=$tarea['prioridad'];
+            $usuario_activo = $tarea['usuario_activo'];
             if (isset($tarea['noleidos'])) $noleidos = $tarea['noleidos'];
             else
             {
@@ -357,6 +366,11 @@ class tareas_model extends CI_Model
             {      
                 if($usuario_destino['usuario_destino']!=0)
                 {
+                    $borde = "";
+                    if ($usuario_activo==$usuario_destino['usuario_destino'])
+                    {
+                        $borde = " border:4px solid black;";
+                    }
                     $consulta_para=$this->db->query('SELECT * FROM usuarios WHERE cod_usuario='.$usuario_destino['usuario_destino']);
                     $fila_para=$consulta_para->row();
                     
@@ -364,6 +378,7 @@ class tareas_model extends CI_Model
                     $array_nombre_para[] = $fila_para->nombre;
                     //$color_para=$fila_para->color_usuario;
                     $array_color_para[] = $fila_para->color_usuario;
+                    $array_borde_para[] = $borde;
                 }
             }
             
@@ -406,7 +421,9 @@ class tareas_model extends CI_Model
                     'clientes' => $array_clientes_nombre,
                     'colorClientes' => $array_clientes_color,
                     'prioridad' => $prioridad,
-                    'noleidos' => $noleidos
+                    'noleidos' => $noleidos,
+                    'usuario_activo' => $usuario_activo,
+                    'borde_para' => $array_borde_para
                     //'nombre_para' => $nombre_para,
                     //'color_para' => $color_para
                     
@@ -427,6 +444,7 @@ class tareas_model extends CI_Model
     public function nuevaTarea($param)
     {
 
+        
         $cod_usuario=$this->session->userdata('cod_usuario');
         
         $ahora = getdate();
@@ -449,13 +467,18 @@ class tareas_model extends CI_Model
             'estado' => 1,
             'usuario_origen' => $cod_usuario,
             'prioridad' => $param['prioridad_tarea'],
-            'facturable' => $param['facturable_tarea']//,'minutos' => $param['minutos']
+            'facturable' => $param['facturable_tarea'],
+            'usuario_activo' => $param['usuario_activo']
+
         );
-        
+
+        $prioridad=$param['prioridad_tarea'];
+        $usuario_activo = $param['usuario_activo'];
         $this->db->insert('tareas',$campos);
         $cod_tarea=$this->db->insert_id();
         
         //**********************************************
+        $str_usuarios="";
         if(isset($param["usuario_tarea"]))
         {
             foreach ($param["usuario_tarea"] as $usuario)
@@ -465,9 +488,15 @@ class tareas_model extends CI_Model
                     'usuario_destino' => $usuario
                 );
                 $this->db->insert('reltareausuariodest', $data);
+                if ($usuario==$usuario_activo) $str_usuarios.="<b>".$this->obtenerNombreUsuario($usuario)."</b>, ";
+                else $str_usuarios.= $this->obtenerNombreUsuario($usuario).', ';
             }
+            $str_usuarios.='*'; 
         }
+        $str_usuarios=str_replace(', *','',$str_usuarios);
+        if ($str_usuarios=='*') $str_usuarios="";
         //**********************************************
+        $str_clientes="";
         if(isset($param["clientesTarea"]))  
         { 
             foreach ($param["clientesTarea"] as $cliente)
@@ -477,8 +506,13 @@ class tareas_model extends CI_Model
                     'id_cliente' => $cliente
                 );
                 $this->db->insert('reltareacliente', $data); //tabla y datos
+                $str_clientes.= $this->obtenerNombreCliente($cliente).', ';
             }
-        } 
+            $str_clientes.='*'; 
+        }
+        $str_clientes=str_replace(', *','',$str_clientes);
+        if ($str_clientes=='*') $str_clientes="";
+        
         //***********************************************
         if($param['mensaje_tarea']!='<p>&nbsp;</p>')
         {
@@ -508,16 +542,18 @@ class tareas_model extends CI_Model
             $date = new DateTime($hora_creada);
             $hora_creada_formateada = $date->format('H:i');
             
-            $date = DateTime::createFromFormat( 'Y-m-d', $fecha_limite);
-            if(!isset($date))
+            
+            $fecha_limite_formateada="";
+            if($fecha_limite!="")
             {
+                $date = DateTime::createFromFormat( 'Y-m-d', $fecha_limite);
                 $fecha_limite_formateada = $date->format('d-m-Y');
             }
+
             
             //$date = DateTime::createFromFormat( 'H:i:s', $hora_limite);
             $date = new DateTime($hora_limite);
-            $hora_limite_formateada = $date->format('H:i');
-
+            
             $usuarios_anteriores = $param["usuario_tarea"];
             
             $cabecera_mail='NUEVA TAREA: '.$param['nombre_tarea'];            
@@ -528,15 +564,24 @@ class tareas_model extends CI_Model
             $cuerpo_mail=$cuerpo_mail.'</head>';
             $cuerpo_mail=$cuerpo_mail.'<body>';
             $cuerpo_mail=$cuerpo_mail.'Tienes una nueva tarea pendiente de '.$nombre_origen.'('.$email_origen.'): <b>'.$param['nombre_tarea'].'</b><br><br><hr>';
-            $cuerpo_mail=$cuerpo_mail.'<b>Fecha creada:</b> '.$fecha_creada_formateada.'  '.$hora_creada_formateada.' horas<br><br>';
-            $cuerpo_mail=$cuerpo_mail.'<b>Fecha limite:</b> '.$fecha_limite_formateada.'  '.$hora_limite_formateada.' horas<br><br>';
+            $cuerpo_mail=$cuerpo_mail.'<b>Fecha creada:</b> '.$fecha_creada_formateada.'  '.$hora_creada_formateada.'<br><br>';
+            if ($fecha_limite_formateada!="") $cuerpo_mail=$cuerpo_mail.'<b>Fecha límite:</b> '.$fecha_limite_formateada.'<br><br>';
+            if ($str_clientes != "") $cuerpo_mail=$cuerpo_mail.'<b>Clientes:</b> '.$str_clientes.'<br><br>';
+            if ($str_usuarios != "") $cuerpo_mail=$cuerpo_mail.'<b>Usuarios:</b> '.$str_usuarios.'<br><br>';
+            if ($prioridad=="ALTA") $prioridad="<font color=red><b>".$prioridad."</b></font>";
+            $cuerpo_mail=$cuerpo_mail.'<b>Prioridad:</b> '.$prioridad.'<br><br>';
+            
             
             if($param['mensaje_tarea']!='<p>&nbsp;</p>')
             {
                 $cuerpo_mail=$cuerpo_mail.'<b>Mensaje:</b><br> '.$param['mensaje_tarea'];
             }
             $cuerpo_mail=$cuerpo_mail.'<hr><br>Puedes ver el contenido de la tarea en el siguiente enlace: <a href="'.base_url().'tarea/'.$cod_tarea.'">'.base_url().'tarea/'.$cod_tarea.'</a>';
-            
+            if ($fecha_limite_formateada!="")
+            {
+                $cuerpo_mail=$cuerpo_mail."<hr><br><a href='".base_url()."archivosIcs/$cod_tarea/tarea$cod_tarea.ics'>Pulsa aquí para añadir a tu calendario</a>";
+            }
+
             $cuerpo_mail=$cuerpo_mail.'</body>';
             $cuerpo_mail=$cuerpo_mail.'</html>';
             foreach ($usuarios_anteriores as $usuario_destino)
@@ -549,6 +594,7 @@ class tareas_model extends CI_Model
             }
         } 
         $this->ponerComoLeida($cod_tarea,$cod_usuario);   
+        return $cod_tarea;
     }
     
     public function eliminarTarea($cod_tarea)
@@ -600,7 +646,7 @@ class tareas_model extends CI_Model
         {
             if (is_dir($archivos_carpeta))
             {
-                rmDir_rf($archivos_carpeta);
+                rmDir($archivos_carpeta);
             } 
             else 
             {
@@ -613,12 +659,10 @@ class tareas_model extends CI_Model
     public function getNombre($cod_tarea)
     {
         $query = $this->db->query('select nombre FROM tareas WHERE cod_tarea='.$cod_tarea);
-
         
         $tarea=$query->row();
         
         $nombre=$tarea->nombre;
-        
             
         return $nombre;
     }
@@ -634,6 +678,7 @@ class tareas_model extends CI_Model
     
     public function obtenerNombreUsuario($cod_usuario)
     {
+        if ($cod_usuario=="" || $cod_usuario==null) return "";
         $query = $this->db->query('select nombre FROM usuarios WHERE cod_usuario='.$cod_usuario);
         $usuario=$query->row();
         $nombre=$usuario->nombre;       
@@ -703,6 +748,14 @@ class tareas_model extends CI_Model
         $cod_usuario=$param['cod_usuario'];
         $mensaje=$param['mensaje_tarea'];
         $minutos=($param['tiempo_horas']*60)+$param['tiempo_minutos'];
+
+        $fecha_limite=$param['fecha_tarea'];
+        $fecha_limite_formateada="";
+            if($fecha_limite!="")
+            {
+                $date = DateTime::createFromFormat( 'Y-m-d', $fecha_limite);
+                $fecha_limite_formateada = $date->format('d-m-Y');
+            }
         
         $query_tarea=$this->db->query('SELECT * FROM tareas WHERE cod_tarea='.$cod_tarea);
         
@@ -716,7 +769,7 @@ class tareas_model extends CI_Model
         $hora_creada=$ahora['hours'].':'.$ahora['minutes'].':'.$ahora['seconds'];
 
         $fecha_creada_formateada=$ahora['mday'].'-'.$ahora['mon'].'-'.$ahora['year'];
-        $hora_creada_formateada=$ahora['hours'].':'.$ahora['minutes'];
+        $hora_creada_formateada=$ahora['hours'].':'.str_pad($ahora['minutes'],2,'0',STR_PAD_LEFT);
         
         $query = $this->db->query('SELECT MAX(cod_linea) as maximo FROM lintareas WHERE cod_tarea='.$cod_tarea);
         
@@ -768,6 +821,10 @@ class tareas_model extends CI_Model
         $cuerpo_mail=$cuerpo_mail.'<b>Hora:</b> '.$hora_creada_formateada.' horas<br><br>';
         $cuerpo_mail=$cuerpo_mail.'<b>Mensaje:</b><br> '.$mensaje.'<br><br>';
         $cuerpo_mail=$cuerpo_mail.'<br>Puedes ver el contenido de la tarea en el siguiente enlace: <a href="'.base_url().'tarea/'.$cod_tarea.'">'.base_url().'tarea/'.$cod_tarea.'</a>';
+        if ($fecha_limite_formateada!="")
+            {
+                $cuerpo_mail=$cuerpo_mail."<hr><br><a href='".base_url()."archivosIcs/$cod_tarea/tarea$cod_tarea.ics'>Pulsa aquí para añadir a tu calendario</a>";
+            }
         $cuerpo_mail=$cuerpo_mail.'</body>';
         $cuerpo_mail=$cuerpo_mail.'</html>';
         foreach ($usuarios_anteriores as $usuario_destino) 
@@ -810,15 +867,14 @@ class tareas_model extends CI_Model
         $nombre_anterior=$fila_tarea->nombre;
         $nombre_nuevo=$param['nombre_tarea'];
 
-        $fecha_anterior=$fila_tarea->fecha_limite;
-        $fecha_nueva=$param['fecha_tarea'];
-        if($fecha_nueva == "")
+        $fecha_limite_anterior=$fila_tarea->fecha_limite;
+        $fecha_limite=$param['fecha_tarea'];
+        if($fecha_limite != "")
         {
-            $fecha_nueva="0000-00-00";
+            $date = DateTime::createFromFormat( 'Y-m-d', $fecha_limite);
+            $fecha_limite_formateada = $date->format('d-m-Y');
         }
 
-        $hora_anterior=$fila_tarea->hora_limite;
-        $hora_nueva=$param['hora_tarea'];
         
         $usuarios_nuevos = $param["usuario_tarea"];
         $usuariosEnviarCorreo = $param["usuario_tarea"];
@@ -849,8 +905,13 @@ class tareas_model extends CI_Model
         
         $fecha_mod_formateada=$hoy['mday'].'-'.$hoy['mon'].'-'.$hoy['year'];
         $hora_mod_formateada=$hoy['hours'].':'.$hoy['minutes'];
+
+        $usuario_activo_anterior = $fila_tarea->usuario_activo;
+        $usuario_activo = $param['usuario_activo'];
         
-        
+        $nombre_usuario_activo = $this->obtenerNombreUsuario($usuario_activo);
+        $nombre_usuario_activo_anterior = $this->obtenerNombreUsuario($usuario_activo_anterior);
+
         $campos=array(
             'nombre' => $param['nombre_tarea'],
             'estado' => $param['estado_tarea'],
@@ -859,7 +920,8 @@ class tareas_model extends CI_Model
             'fecha_mod' => $fecha_mod,
             'hora_mod' => $hora_mod,
             'prioridad' => $prioridad,
-            'minutos' => $minutos
+            'minutos' => $minutos,
+            'usuario_activo' => $usuario_activo
         );
         
         $this->db->where('cod_tarea',$param['cod_tarea']);
@@ -899,12 +961,11 @@ class tareas_model extends CI_Model
         $cuerpo_mail = "";
        // if(!($nombre_anterior==$nombre_nuevo && $estado_anterior==$nuevo_estado && $fecha_anterior==$fecha_nueva && $hora_anterior==$hora_nueva && $usuarios_anteriores==$usuarios_nuevos))
 
-       if(!($nombre_anterior==$nombre_nuevo && $estado_anterior==$nuevo_estado && $usuarios_anteriores==$usuarios_nuevos))
+       if(!($nombre_anterior==$nombre_nuevo && $estado_anterior==$nuevo_estado && $usuarios_anteriores==$usuarios_nuevos && $clientes_anteriores==$clientes_nuevos && $nombre_usuario_activo==$nombre_usuario_activo_anterior && $prioridad==$prioridad_anterior && $fecha_limite==$fecha_limite_anterior))
 
         {
             //$nombre_origen=$this->obtenerNombreUsuario($usuario_origen);
             //$email_origen=$this->obtenerMailUsuario($usuario_origen);
-            
 
             $cabecera_mail = 'TAREA '.$nombre_tarea.' ACTUALIZADA';
             $cuerpo_mail = $cuerpo_mail.'<html>';
@@ -923,28 +984,15 @@ class tareas_model extends CI_Model
 
             if ($prioridad_anterior!=$nueva_prioridad)
             {
-                $cuerpo_mail=$cuerpo_mail.'La <b>prioridad</b> de la tarea ha sido modificada, ha pasado de '.$prioridad_anterior.' a '.$nueva_prioridad.'.<br>';
+                $cuerpo_mail=$cuerpo_mail.'La <b>prioridad</b> de la tarea ha sido modificada, ha pasado de '.$prioridad_anterior.' a <b>'.$nueva_prioridad.'</b>.<br>';
             }
 
-            if($estado_anterior!=$nuevo_estado)
+            if ($fecha_limite!=$fecha_limite_anterior)
             {
-                switch ($nuevo_estado) 
-                {
-                    case 1:
-                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>PENDIENTE</b><br>';
-                        break;
-                    case 2:
-                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>EN CURSO</b><br>';
-                        break;
-                    case 3:
-                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>COMPLETADA</b><br>';
-                        break;
-                }        
-
-                $cuerpo_mail=$cuerpo_mail.'<hr><br>Puedes ver el contenido de la tarea en el siguiente enlace: <a href="'.base_url().'tarea/'.$cod_tarea.'">'.base_url().'tarea/'.$cod_tarea.'</a>';
+                if ($fecha_limite_anterior=="0000-00-00") $cuerpo_mail=$cuerpo_mail.'Se ha establecido una <b>fecha límite</b>: '.$fecha_limite_formateada.'.';
+                else if ($fecha_limite=="") $cuerpo_mail=$cuerpo_mail.'La <b>fecha límite</b> ha sido eliminada.';
+                else if($fecha_limite!=$fecha_limite_anterior) $cuerpo_mail=$cuerpo_mail.'La <b>fecha límite</b> ha cambiado a '.$fecha_limite_anterior;
             }
-
-            
 
             if($usuarios_anteriores!=$usuarios_nuevos)
             {
@@ -970,6 +1018,41 @@ class tareas_model extends CI_Model
                 } 
                 $cuerpo_mail=$cuerpo_mail.'</ul><br>';
             }
+
+            if ($usuario_activo_anterior!=$usuario_activo)
+            {
+                if ($nombre_usuario_activo_anterior=="") $cuerpo_mail=$cuerpo_mail.'Se ha asignado un <b>usuario activo </b> a la tarea: <b>'.$nombre_usuario_activo.'</b>.<br>';
+                else if ($nombre_usuario_activo=="") $cuerpo_mail=$cuerpo_mail.'Se ha eliminado a <b>'.$nombre_usuario_activo_anterior.'</b> como <b>usuario activo</b> de la tarea.<br>';
+                else $cuerpo_mail=$cuerpo_mail.'El <b>usuario activo</b> de la tarea  a pasado de ser '.$nombre_usuario_activo_anterior.'a <b>'. $nombre_usuario_activo.'</b>.<br>';
+               
+            }
+
+            if($estado_anterior!=$nuevo_estado)
+            {
+                switch ($nuevo_estado) 
+                {
+                    case 1:
+                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>PENDIENTE</b><br>';
+                        break;
+                    case 2:
+                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>EN CURSO</b><br>';
+                        break;
+                    case 3:
+                        $cuerpo_mail=$cuerpo_mail.'El <b>estado</b> de la tarea ha pasado a <b>COMPLETADA</b><br>';
+                        break;
+                }        
+
+                
+            }
+
+            $cuerpo_mail=$cuerpo_mail.'<br>Puedes ver el contenido de la tarea en el siguiente enlace: <a href="'.base_url().'tarea/'.$cod_tarea.'">'.base_url().'tarea/'.$cod_tarea.'</a>';
+            if ($fecha_limite_formateada!="")
+            {
+                $cuerpo_mail=$cuerpo_mail."<br><hr><br><a href='".base_url()."archivosIcs/$cod_tarea/tarea$cod_tarea.ics'>Pulsa aquí para añadir a tu calendario</a>";
+            }
+            
+
+            
             $cuerpo_mail=$cuerpo_mail.'</body></html>';
             foreach ($usuariosEnviarCorreo as $usuario_destino) 
             {                

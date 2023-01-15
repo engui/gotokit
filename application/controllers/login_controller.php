@@ -6,6 +6,7 @@ class login_controller extends CI_Controller
     {
         parent::__construct();
         $this->load->model('login_model');
+        $this->load->model('configuracion_model');
         $this->load->helper('cookie');
         //$this->load->library('encrypt');
         //$this->load->library('session');
@@ -122,6 +123,7 @@ class login_controller extends CI_Controller
     
     public function irInicio()
     {
+        $this->configuracion_model->insertar_logacceso($this->session->userdata('cod_usuario'));
         redirect('inicio');
         //redirect('tareas-pendientes');
     }

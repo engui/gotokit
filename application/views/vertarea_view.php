@@ -39,14 +39,15 @@ include 'includes/header.php';
       {
     ?>
         <div class="titulo-editar">Editar Tarea</div>
-          <input type="hidden" name="cod_tarea" value="<?php echo $cod_tarea; ?>">
+          <input type="hidden" id="cod_tarea" name="cod_tarea" value="<?php echo $cod_tarea; ?>">
+          <input type="hidden" id="usuario_activo" value="<?php echo $datos_tarea->usuario_activo;?>">
           <table class="form-gotosystem actualizar-usuario w-100">
             <thead>
             </thead>
             <tbody>
               <tr>
                 <td>Asunto:</td>
-                <td class="px-4 py-2" style="width: 75%;"><input class="form-control" name="nombreTarea" type="text" value="<?php echo $datos_tarea->nombre; ?>"></td>
+                <td class="px-4 py-2" style="width: 75%;"><input class="form-control" name="nombreTarea" id="nombreTarea" type="text" value="<?php echo $datos_tarea->nombre; ?>"></td>
               </tr>
               <tr>
                   <td>Clientes:</td>
@@ -73,19 +74,7 @@ include 'includes/header.php';
                     </select>
                     <script type="text/javascript">
                       $(document).ready(function() {
-                        /*$('#menuClientes').multiselect({
-                          enableFiltering: true,
-                          enableCaseInsensitiveFiltering: true,
-                          numberDisplayed: 3,
-                          nonSelectedText: 'Selecciona los clientes',
-                          buttonWidth: '300px'
-                        });*/
-                        $('#menuClientes').select2({
-                          theme: 'bootstrap4'
-                        });
-                        var x = document.getElementsByClassName("multiselect-search");
-                        var buscador = x[1];
-                        buscador.placeholder = "Buscar"; 
+                        
                       });
                     </script>
                   </td>
@@ -112,7 +101,7 @@ include 'includes/header.php';
               </tr>
               <tr>
                 <td>Fecha límite:</td>
-                <td class="px-4 py-2"><input class="form-control" name="fechaTarea" type="date" value="<?php echo $datos_tarea->fecha_limite; ?>" ></td>
+                <td class="px-4 py-2"><input class="form-control" id="fechaTarea" name="fechaTarea" type="date" value="<?php echo $datos_tarea->fecha_limite; ?>" ></td>
               <tr>
               </tr>
               
@@ -145,13 +134,15 @@ include 'includes/header.php';
                   </select>
                   <script type="text/javascript">
                     $(document).ready(function() {
-                      $('#menuUsuarios').multiselect({
+                      
+                      /*$('#menuUsuarios').multiselect({
                           enableFiltering: true,
                           enableCaseInsensitiveFiltering: true,
                           numberDisplayed: 6,
                           nonSelectedText: 'Selecciona los clientes',
                           buttonWidth: '300px'
-                      });
+                      });*/
+
                       
                       var x = document.getElementsByClassName("multiselect-search");
                       var buscador1 = x[0];
@@ -160,6 +151,16 @@ include 'includes/header.php';
                   </script>
                 </td>
               </tr>
+
+              <tr>
+                <td>Usuario activo:</td>
+                <td class="px-4 py-2">
+                  <select class="form-control" id="menuUsuarioActivo" name="usuarioActivo">
+                    
+                  </select>
+                </td>
+              </tr>
+
                 <tr>
                   <td>Estado:</td>
                   <td class="px-4 py-2" >
@@ -443,9 +444,9 @@ include 'includes/header.php';
                                                 <textarea name="editorModal'.$cod_linea.'" id="editorModal'.$cod_linea.'">'.$mensaje_linea.'</textarea>
                                                 <input type="hidden" name="cod_tareaModel" value="'.$cod_tarea.'">
                                                 <div class="row" style="margin-top:10px">
-                                                <div class="col-sm-4">Tiempo:</div>
+                                                <!--<div class="col-sm-4">Tiempo:</div>
                                                 <div class="col-sm-4">'.$select_horas.'</div>
-                                                <div class="col-sm-4">'.$select_minutos.'</div>
+                                                <div class="col-sm-4">'.$select_minutos.'</div>-->
                                                 </div>
                                               </div>
                                               <div class="modal-footer">
@@ -467,7 +468,7 @@ include 'includes/header.php';
                             }
                                     
                             echo '</tr>';
-                            echo '<tr style="border-bottom:1px solid grey"><td colspan="3" style="background-color:white"><span style="text-align:right;float:right;font-style: italic; font-size: 13px;background-color:white">'.$horas.' '.$texto_horas.' '.$minutos.' minutos</span></td></tr>';
+                            //echo '<tr style="border-bottom:1px solid grey"><td colspan="3" style="background-color:white"><span style="text-align:right;float:right;font-style: italic; font-size: 13px;background-color:white">'.$horas.' '.$texto_horas.' '.$minutos.' minutos</span></td></tr>';
                             
                             echo '<script>
                               $(document).ready(function() {
@@ -526,7 +527,13 @@ include 'includes/header.php';
                     }
                   }
                 </script>
-                <tr><td>&nbsp;</td></tr>
+                
+                <tr>
+                  <td>
+                    &nbsp;
+                  </td>
+                </tr>
+
                 </tbody>
                  <tfoot class="foot-tabla">
                  <tr>
@@ -550,7 +557,7 @@ include 'includes/header.php';
                             });
                     </script>
                  </tr>
-                 <tr>
+                <!-- <tr>
                     <td colspan="3">
                       <div class="row">      
                       <div class="col-sm-5">Tiempo de ejecución:</div>
@@ -574,7 +581,7 @@ include 'includes/header.php';
                       <div class="col-sm-1"></div>
                       </div>
                     </td>  
-                  </tr>
+                  </tr>-->
 
                    <tr>
                     <td colspan="3" class="px-4 py-2">
@@ -586,6 +593,9 @@ include 'includes/header.php';
                    </tr>
                    
                  </tfoot> 
+                 
+                 
+                 
          </table>
         
     </div>
@@ -612,12 +622,20 @@ include 'includes/header.php';
     ?>
 </div>
 
+<?php
+  $clase = "";
+  if ($datos_tarea->fecha_limite==null || $datos_tarea->fecha_limite=="" || $datos_tarea->fecha_limite=="0000-00-00") $clase=" ocultar ";
+  //echo ("<a href='".base_url()."generar_ics/".$cod_tarea."'><button id='botonCalendario' style='margin-bottom:20px' type='button' class='".$clase." btn btn-lg btn-info btn-block'>Añadir a calendario</button></a>");
+  echo ("<button id='botonCalendario' style='margin-bottom:20px' type='button' class='".$clase." btn btn-lg btn-info btn-block'>Añadir a calendario</button>");
+?>
+
 <input class="btn btn-lg btn-gotosystem btn-block" id="botonG" value="Enviar" name="enviar" type="submit" onclick="comprobarCampos()">
 </form>
 
 <?php 
-          if($rutasArchivos != null) 
-          {
+       
+        if($rutasArchivos != null) 
+        {
         ?>
             <form action="<?php echo base_url(); ?>vertarea_controller/descargarCarpeta" method="post" enctype='multipart/form-data'>
               <input type="hidden" name="cod_tarea" value="<?php echo $cod_tarea; ?>">
@@ -633,11 +651,100 @@ include 'includes/footer.php';
 ?>
 
 <script>
+
+var nombres = "engui,pepe";
+
 function comprobarCampos()
 {
   $.LoadingOverlay("show");
-  
 }
+
+function cargarUsuariosActivos($primeravez=false)
+{
+  var res_cod = ($('#menuUsuarios').val());
+  var res_text = $('#menuUsuarios').select2('data');
+  var usuario_activo = $('#menuUsuarioActivo').val();
+  if ($primeravez) usuario_activo = $('#usuario_activo').val();
+  $('#menuUsuarioActivo').empty().trigger('change');
+  $.each(res_cod,function(indice, codigo) {
+    var texto = res_text[indice].text;
+    var newOption = new Option(texto, codigo, false, false);
+    $('#menuUsuarioActivo').append(newOption).trigger('change');  
+  });
+  
+  $('#menuUsuarioActivo').val(usuario_activo).trigger('change');
+  
+
+}
+
+$(document).on('change', '#menuUsuarios',  function(){
+  cargarUsuariosActivos();
+});
+
+$(document).on('change','#fechaTarea', function() {
+  var fecha=$("#fechaTarea").val();
+  if (fecha=="") $("#botonCalendario").addClass("ocultar");
+  else $("#botonCalendario").removeClass("ocultar");
+});
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
+
+
+
+$(document).on('click','#botonCalendario', function() {
+  titulo = $("#nombreTarea").val();
+  fecha = $("#fechaTarea").val();
+  cod_tarea = $("#cod_tarea").val();
+  clientes = $("#menuClientes").select2('data');
+  str_clientes = " (";
+  $.each(clientes, function(indice, cliente) 
+  {
+    str_clientes+=cliente.text+', ';
+  });
+  str_clientes+=")";
+  str_clientes = str_clientes.replace(', )',')');
+  str_clientes = str_clientes.replace(' ()','');
+  str_clientes = str_clientes.replace(' )',')');
+  titulo = titulo + str_clientes;
+  $.ajax({
+                        type:"POST",
+                        url:"/vertarea_controller/generar_ics",
+                        data: {cod_tarea: 2, titulo: titulo, fecha:fecha},
+                        success: function(respuesta)
+                        {
+                          download("tarea"+cod_tarea+".ics",respuesta);
+                        }
+                    });  
+});
+
+$("select").on("select2:unselect", function (evt) {
+     if (!evt.params.originalEvent) return;
+     evt.params.originalEvent.stopPropagation();
+   });
+   
+   $(document).ready(function() {
+    $('#menuClientes').select2({theme: 'bootstrap4'});
+    $('#menuUsuarios').select2({theme: 'bootstrap4'});
+    $('#menuUsuarioActivo').select2({theme: 'bootstrap4', allowClear: true,placeholder: "Dejar así si no hay activo"});
+    cargarUsuariosActivos(true);
+    
+    /*var x = document.getElementsByClassName("multiselect-search");
+    var buscador = x[1];
+    buscador.placeholder = "Buscar"; */
+    
+   });
+
 </script>
 
 

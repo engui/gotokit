@@ -84,6 +84,8 @@ $route['contrasenyas'] = "inicio_contrasenyas_controller/MostrarContrasenyas";
 //vertarea_controller
 $route['tarea/(:num)'] = "vertarea_controller/mostrarTarea/$1";
 
+$route['generar_ics_/(:num)'] = "vertarea_controller/generar_ics/$1";
+
 //verconocimiento_controller
 $route['conocimiento/(:num)'] = "verconocimiento_controller/mostrarConocimiento/$1";
 
@@ -92,6 +94,8 @@ $route['contrasenya/(:num)'] = "vercontrasenya_controller/mostrarContrasenya/$1"
 
 //nuevaTareController
 $route['inicio/correcta']='nuevatarea_controller/irInicio';
+
+$route['configuracion'] = "configuracion_controller";
 
 $route['404_override'] = '';
 

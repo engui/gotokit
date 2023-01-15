@@ -21,7 +21,6 @@ class inicio_conocimientos_controller extends CI_Controller
         $limit_conocimientos=$this->limit_conocimientos;
 
         $conocimientos=$this->conocimientos_model->mostrarConocimientos();
-
         $conocimientos_trozo=array_slice($conocimientos,0,$limit_conocimientos);
         $total_paginas=ceil(count($conocimientos)/$limit_conocimientos);
         $pagina_actual=1;

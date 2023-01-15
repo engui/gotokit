@@ -14,7 +14,6 @@ include 'includes/headerMantenimiento.php';
             	<tr>
             		<td>
             			<select name="etiquetaConocimiento[]" id="menuEtiquetas" onchange="myFunction()">
-                            <option selected value="defecto" id="defecto"> -- Selecciona una Etiqueta -- </option>
                       <?php
                         foreach($etiquetas as $etiqueta)
                         {
@@ -55,13 +54,20 @@ include 'includes/headerMantenimiento.php';
 </div>
 <script type="text/javascript">
 	$(document).ready(function() {
-		$('#menuEtiquetas').multiselect({
+		/*$('#menuEtiquetas').multiselect({
 			enableFiltering: true,
 			enableCaseInsensitiveFiltering: true,
 			numberDisplayed: 3,
 			nonSelectedText: 'Selecciona los etiquetas',
 			buttonWidth: '300px'
-		});
+		});*/
+        $('#menuEtiquetas').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Selecciona etiqueta',
+            width: '100%'
+        });
+        $("#menuEtiquetas").val("")
+        $("#menuEtiquetas").trigger("change");
 		var x = document.getElementsByClassName("multiselect-search");
 		var buscador = x[0];
 		buscador.placeholder = "Buscar"; 
@@ -97,6 +103,9 @@ function volver()
 
 function myFunction()
 {
+    var x = document.getElementById("menuEtiquetas").value;
+    if (x=="") exit;
+
     $('#celdaBotonModificar').show();
     $('#celdaBotonInsertar').hide();
     $('#celdaBotonBorrar').show();
@@ -104,7 +113,7 @@ function myFunction()
 
     
 
-	var x = document.getElementById("menuEtiquetas").value;
+	
     //document.getElementById("nombreEtiqueta").value = "a";
 	$.ajax({
         type:"POST",

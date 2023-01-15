@@ -22,7 +22,7 @@
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://gotokit.gotosystem.com/';
+$config['base_url'] = 'https://gotokit.gotosystem.com/';
 //$config['base_url'] = 'http://gotosystem.dyndns.org:91/gotoagenda/';
 
 /*

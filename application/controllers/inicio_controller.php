@@ -1,5 +1,7 @@
 <?php
 
+
+
 class inicio_controller extends CI_Controller
 {
      private $limit_tareas=100;
@@ -8,6 +10,7 @@ class inicio_controller extends CI_Controller
     {
         parent::__construct();
         $this->load->model('tareas_model');
+        
         //$this->load->library('encrypt');
         //$this->load->library('session');
         $this->output->nocache();
@@ -16,6 +19,11 @@ class inicio_controller extends CI_Controller
     
     public function index()
     {
+
+        //$event = new ICS("2009-11-06 09:00","2009-11-06 21:00","Test Event","This is an event made by Jamie Bicknell","GU1 1AA");
+        //$event->show();
+        //return;
+        
        
         if($this->session->userdata('cod_usuario')=='')
         {
@@ -46,6 +54,7 @@ class inicio_controller extends CI_Controller
     
     public function mostrarTareas()
     {
+
         
         $pagina_actual=$this->input->get('pagina');
                 
@@ -74,6 +83,12 @@ class inicio_controller extends CI_Controller
         //$opcion_menu='inicio';
 
         $rutaCarpeta = 'uploads/'.$cod_tarea.'/';
+        if (file_exists($rutaCarpeta)) 
+        {       
+            $this->tareas_model->eliminarCarpetaTarea($rutaCarpeta);
+        }
+
+        $rutaCarpeta = 'archivosIcs/'.$cod_tarea.'/';
         if (file_exists($rutaCarpeta)) 
         {       
             $this->tareas_model->eliminarCarpetaTarea($rutaCarpeta);

@@ -1,7 +1,10 @@
 <?php
 
+
+
 class tareascreadas_controller extends CI_Controller
 {
+
      private $limit_tareas=100;
     
     function __construct()
