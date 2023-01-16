@@ -36,7 +36,9 @@ class tareaspendientes_controller extends CI_Controller
         $total_paginas=ceil(count($tareas)/$limit_tareas);
         $pagina_actual=1;
         
-
+        $data['sololasmias'] = $this->session->userdata('sololasmias');
+        $data["super"] = $this->session->userdata('super');
+        
         $data['tareas'] = $tareas_trozo;
         $data['total_paginas'] = $total_paginas;
         $data['pagina_actual'] = $pagina_actual;

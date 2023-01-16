@@ -18,6 +18,17 @@ include 'includes/header.php';
      
      ?>
 
+    <div class="panelsuper" <?php if ($super!=1) echo " hidden "?>>
+
+       <input class="checkbox" type="checkbox" id="sololasmias"
+       <?php
+        if ($sololasmias==1) echo (" checked "); 
+        ?>
+       ><label for="sololasmias">&nbsp;</label>
+             
+        Mostrar únicamente tareas donde intervengo
+        <hr>
+    </div>                 
 <table class="table tabla-tareas mt-3" id="tablaTareas">
     
        
@@ -32,71 +43,7 @@ include 'includes/header.php';
               
             
         <thead>
-              <?php
-                    if($this->session->userdata('super')==1)
-                    {
-
-
-                 ?>
-
-
-
-                      <tr>
-                    <td colspan="7" style="border-top: none;">
-                     <form action="<?php echo base_url(); ?>inicio_controller/MostrarFiltro" method="post">
-                     <input type="hidden" name="cod_usuario" value="<?php echo $this->session->userdata('cod_usuario'); ?>">
-                     <!--<table>
-                            <tr>
-                                <td class="pt-4 pb-2" style="border-top: none;">Mostrar:</td>
-                                <td class="pt-4 pb-2 px-4" style="border-top: none;">
-                                <?php
-                                    if($this->session->userdata('mostrar_todos')!=0)
-                                    {
-                                 ?>
-                                    <input class="checkbox" type="checkbox" id="mostrar_yo" name="mostrar_yo" onclick="checkyo(this)">
-                                 <?php
-                                    }
-                                    else
-                                    {
-                                 ?>
-                                    <input class="checkbox" type="checkbox" id="mostrar_yo" name="mostrar_yo" onclick="checkyo(this)" checked>
-                                 <?php
-                                    }
-                                 ?>
-                                 <label for="mostrar_yo">Yo</label>
-                                </td>
-                                <td class="pt-4 pb-2 px-4" style="border-top: none;">
-                                 <?php
-                                    if($this->session->userdata('mostrar_todos')!=0)
-                                    {
-                                 ?>
-                                 <input class="checkbox" type="checkbox" id="mostrar_todos" name="mostrar_todos" onclick="checktodos(this)" checked>
-                                  <?php
-                                    }
-                                    else
-                                    {
-                                 ?>
-                                 <input class="checkbox" type="checkbox" id="mostrar_todos" name="mostrar_todos" onclick="checktodos(this)">
-                                 <?php
-                                    }
-                                 ?>
-                                 <label for="mostrar_todos">Todos</label>
-
-                                </td>
-                                <td style="border-top: none;"> <input class="btn btn-lg btn-gotosystem btn-block btn-filtrar" value="Filtrar" type="submit"></td>
-
-                            </tr>
-
-
-                        </table>-->
-                        </form>
-                          </td>
-                        </tr>
-             <?php
-                    }
-    
-        
-                ?>
+              
             <tr class="fila-sin-borde">
                 <th scope="col"></th>
                 <th scope="col" style="width: 250px;">Nombre</th>
@@ -425,7 +372,21 @@ $.fn.DataTable.ext.type.search['html'] = function(data) {
 
 } );
 
-
+$(document).on('click','#sololasmias', function(){
+    var pulsado = $(this).is(':checked');
+    if (pulsado) pulsado=1;
+    else pulsado=0;
+    $.ajax({
+        type:"POST",
+        dataType: 'json',
+        url:"<?php echo base_url(); ?>mantenimiento_clientes_controller/actualizar_sololasmias",
+        data: {pulsado:pulsado},
+        success: function(datos)
+        {  
+          location.reload();
+        }
+    });
+});
 
 
 </script>

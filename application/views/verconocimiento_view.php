@@ -44,7 +44,11 @@ include 'includes/headerConocimientos.php';
 	                    </td>
                 	</tr>
                 	<tr>
-                		<td>Clientes:</td>
+                		<td>
+						<?php
+                      		echo (ucfirst(STR_CLIENTE).'s:'); 
+                    	?>
+						</td>
                 		<td class="px-4 py-2">
                 			<select class="form-control" id="menuClientes" multiple="multiple" name="clientesConocimiento[]">
                             <?php

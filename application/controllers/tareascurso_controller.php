@@ -36,8 +36,10 @@ class tareascurso_controller extends CI_Controller
         $tareas_trozo=array_slice($tareas,0,$limit_tareas);
         $total_paginas=ceil(count($tareas)/$limit_tareas);
         $pagina_actual=1;
-        
+        $data['sololasmias'] = $this->session->userdata('sololasmias');
 
+        $data["super"] = $this->session->userdata('super');
+        
         $data['tareas'] = $tareas_trozo;
         $data['total_paginas'] = $total_paginas;
         $data['pagina_actual'] = $pagina_actual;

@@ -9,7 +9,11 @@ include 'includes/headerContrasenyas.php';
             <th scope="col"></th>
             <th scope="col" style="width: 320px;">Nombre</th>
             <!--<th scope="col" class="text-center">Etiquetas</th>-->
-            <th scope="col" class="text-center">Clientes</th>
+            <th scope="col" class="text-center">
+            <?php
+                      echo (ucfirst(STR_CLIENTE).'s'); 
+            ?>
+            </th>
             <th scope="col" class="text-center" style="display: none;">Creada</th>
             <th scope="col" class="text-center">Acciones</th>       
         </tr>

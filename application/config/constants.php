@@ -45,5 +45,7 @@ defined('COPIA_PASSWORD')     OR    define('COPIA_PASSWORD', 'ChPjzuT4');
 defined('COPIA_DB')     OR    define('COPIA_DB', 'gotoagenda_bd');
 defined('COPIA_ZIP') OR    define('COPIA_ZIP', 'zip -r');
 
+defined('STR_CLIENTE') OR    define('STR_CLIENTE', 'contacto');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

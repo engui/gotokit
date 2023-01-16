@@ -50,7 +50,11 @@ include 'includes/header.php';
                 <td class="px-4 py-2" style="width: 75%;"><input class="form-control" name="nombreTarea" id="nombreTarea" type="text" value="<?php echo $datos_tarea->nombre; ?>"></td>
               </tr>
               <tr>
-                  <td>Clientes:</td>
+                  <td>
+                      <?php 
+                        echo ucfirst(STR_CLIENTE).'s:';
+                      ?>
+                  </td>
                   <td class="px-4 py-2">
                     <select class="form-control" id="menuClientes" multiple="multiple" name="clientesTarea[]">
                       <?php

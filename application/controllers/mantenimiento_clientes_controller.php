@@ -34,7 +34,8 @@ class mantenimiento_clientes_controller extends CI_Controller
         $data['poblacion'] = $this->input->post('poblacion');
         $data['provincia'] = $this->input->post('provincia');
         $data['pais'] = $this->input->post('pais');
-    	$id = $this->clientes_model->insertarCliente($data);
+    	$data['tipo'] = $this->input->post('tipo');
+        $id = $this->clientes_model->insertarCliente($data);
         echo $id;
     }
 
@@ -48,6 +49,7 @@ class mantenimiento_clientes_controller extends CI_Controller
         $data['poblacion'] = $this->input->post('poblacion');
         $data['provincia'] = $this->input->post('provincia');
         $data['pais'] = $this->input->post('pais');
+        $data['tipo'] = $this->input->post('tipo');
     	$this->clientes_model->modificarCliente($data);
     }
 
@@ -55,6 +57,13 @@ class mantenimiento_clientes_controller extends CI_Controller
     {
     	$data['cod_cliente'] = $this->input->post('cod_cliente');
     	$this->clientes_model->eliminarCliente($data);
+    }
+
+    public function actualizar_sololasmias()
+    {
+        $data = $this->input->post();
+        $this->session->set_userdata('sololasmias',$data["pulsado"]);
+        echo json_encode($this->session->userdata('sololasmias'));
     }
 
     

@@ -28,8 +28,9 @@ class tareas_model extends CI_Model
         //$query = $this->db->query('select t.*, e.descripcion, e.color, u.nombre as usuario, u.color_usuario from tareas t, estados e, usuarios u where t.estado=e.cod_estado and t.usuario_destino=u.cod_usuario ORDER BY t.fecha_limite ASC, t.hora_limite ASC');
         $super=$this->session->userdata('super');
         $cod_usuario=$this->session->userdata('cod_usuario');
+        $sololasmias=$this->session->userdata('sololasmias');
         
-        if($super==1)
+        if($super==1 && $sololasmias!=1)
         {
              $mostrar_todos=$this->session->userdata('mostrar_todos');
             
@@ -292,9 +293,10 @@ class tareas_model extends CI_Model
     {
         
         $super=$this->session->userdata('super');
+        $sololasmias=$this->session->userdata('sololasmias');
         $cod_usuario=$this->session->userdata('cod_usuario');
         
-        if($super==1)
+        if($super==1 && $sololasmias!=1)
         {
             $mostrar_todos=$this->session->userdata('mostrar_todos');
             

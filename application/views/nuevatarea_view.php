@@ -26,7 +26,11 @@ include 'includes/header.php';
                     <td class="px-4 py-2" style="width: 75%;"><input id="asunto" class="form-control" name="nombreTarea" type="text" value=""></td>
                   </tr>
                   <tr>
-                    <td>Clientes:</td>
+                    <td>
+                      <?php 
+                        echo ucfirst(STR_CLIENTE).'s:';
+                      ?>
+                    </td>
                     
                     <td class="px-4 py-2">
                     <div class="input-group mb-3">

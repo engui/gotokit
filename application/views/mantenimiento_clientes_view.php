@@ -8,7 +8,11 @@ include 'includes/headerMantenimiento.php';
 	<div class="col-xl-5 col-lg-4 col-md-0 col-sm-0">
 		<table class="form-gotosystem actualizar-usuario w-100">
 			<thead>
-                <th colspan="2">Clientes</th>
+                <th colspan="2">
+                    <?php
+                      echo (ucfirst(STR_CLIENTE).'s'); 
+                    ?>
+                </th>
             </thead>
             <tbody>
             	<tr>
@@ -36,6 +40,16 @@ include 'includes/headerMantenimiento.php';
                 <th colspan="4">Datos</th>
             </thead>
             <tbody>
+                <tr>
+                    <td>Tipo</td>
+                    <td colspan="2">    
+                        <select name="tipo" id="tipoCliente">
+                            <option value="LEAD">LEAD</option>
+                            <option selected value="CLIENTE">CLIENTE</option>
+                            <option value="PROVEEDOR">PROVEEDOR</option>
+                        </select>
+                    </td>    
+                </tr>    
             	<tr>
             		<td>Nombre:</td>
             		<td colspan="2"><input class="form-control" type="text" name="nombreCliente" id="nombreCliente"></td>
@@ -90,10 +104,15 @@ include 'includes/headerMantenimiento.php';
 			nonSelectedText: 'Selecciona los clientes',
 			buttonWidth: '300px'
 		});*/
+        $('#tipoCliente').select2({
+            theme: 'bootstrap4',
+            placeholder: 'Selecciona tipo',
+            width: '100%' 
+        });
 
         $('#menuClientes').select2({
             theme: 'bootstrap4',
-            placeholder: 'Selecciona cliente',
+            placeholder: 'Selecciona ' + '<?php echo (STR_CLIENTE);?>',
             width: '100%' 
         });
 
@@ -166,6 +185,7 @@ function myFunction()
             document.getElementById("poblacionCliente").value = datos[0]["poblacion"];
             document.getElementById("provinciaCliente").value = datos[0]["provincia"];
             document.getElementById("paisCliente").value = datos[0]["pais"];
+            $("#tipoCliente").val(datos[0]["tipo"]).trigger("change");
             //document.getElementById("colorCliente").value = datos[0]["color"];
             //$("#colorCliente").css("background-color", datos[0]["color"]);
             //$.farbtastic('#colorpicker').setColor(datos[0]["color"]);
@@ -183,19 +203,20 @@ function insertarCliente()
     var poblacion = $("#poblacionCliente").val();
     var provincia = $("#provinciaCliente").val();
     var pais = $("#paisCliente").val();
+    var tipo = $("#tipoCliente").val();
     //var color = $("#colorCliente").val();
     if(nombre != "")
     {
         $.ajax({
             type:"POST",
             url:"<?php echo base_url(); ?>mantenimiento_clientes_controller/insertarCliente",
-            data: {nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais:pais},
+            data: {nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais:pais, tipo:tipo},
             success: function()
             {
                 //window.location.reload();
                 Swal.fire({
                     type: 'success',
-                    title: 'El cliente ha sido insertado correctamente',
+                    title: 'El <?php echo (STR_CLIENTE);?> ha sido insertado correctamente',
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -209,7 +230,7 @@ function insertarCliente()
         Swal.fire({
           type: 'error',
           title: 'Error al insertar',
-          text: 'El cliente necesita un nombre'
+          text: 'El <?php echo (STR_CLIENTE);?> necesita un nombre'
         })
     }
 }
@@ -225,6 +246,7 @@ function modificarCliente()
     var poblacion = $("#poblacionCliente").val();
     var provincia = $("#provinciaCliente").val();
     var pais = $("#paisCliente").val();
+    var tipo = $("#tipoCliente").val();
     if(nombre == "")
     {
         mensajeError += 'Se necesita un nombre para el usuario.<br>';
@@ -238,7 +260,7 @@ function modificarCliente()
         $.ajax({
             type:"POST",
             url:"<?php echo base_url(); ?>mantenimiento_clientes_controller/modificarCliente",
-            data: {cod_cliente:cod_cliente,nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais: pais},
+            data: {cod_cliente:cod_cliente,nombre:nombre, telefono:telefono, direccion:direccion, cp:cp, poblacion:poblacion, provincia:provincia, pais: pais, tipo:tipo},
             success: function()
             {
                 if(mensajeError != '')
@@ -254,7 +276,7 @@ function modificarCliente()
                     //window.location.reload();
                     Swal.fire({
                         type: 'success',
-                        title: 'El cliente ha sido actualizado correctamente',
+                        title: 'El <?php echo (STR_CLIENTE);?> ha sido actualizado correctamente',
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -278,7 +300,7 @@ function modificarCliente()
         Swal.fire({
             type: 'error',
             title: 'Error al modificar',
-            text: 'Recuerda tener seleccionado el cliente en la lista.'
+            text: 'Recuerda tener seleccionado el <?php echo (STR_CLIENTE);?> en la lista.'
         })
     }
 }
@@ -287,7 +309,7 @@ function eliminarCliente()
 {
     var cod_cliente = document.getElementById("menuClientes").value;
     Swal.fire({
-        title: '¿Estás seguro que quieres borrar este clinete?',
+        title: '¿Estás seguro que quieres borrar este <?php echo (STR_CLIENTE);?>?',
         text: "¡Ya no podrás desacerlo!",
         type: 'warning',
         showCancelButton: true,
@@ -307,7 +329,7 @@ function eliminarCliente()
                         Swal.fire({
                             type: 'success',
                             title: '¡Borrado!',
-                            text: 'El cliente ha sido borrado correctamente.',
+                            text: 'El <?php echo (STR_CLIENTE);?> ha sido borrado correctamente.',
                             showConfirmButton: false,
                             timer: 1500
                         })
@@ -333,7 +355,7 @@ function eliminarCliente()
                 Swal.fire({
                     type: 'error',
                     title: 'Error al eliminar',
-                    text: 'Recuerda tener seleccionado el cliente en la lista.'
+                    text: 'Recuerda tener seleccionado el <?php echo (STR_CLIENTE);?> en la lista.'
                 })   
             }
         }

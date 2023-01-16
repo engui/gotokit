@@ -36,6 +36,7 @@ class nuevatarea_controller extends CI_Controller
         $data['usuarios']=$usuarios;
         //$data['grupos']=$grupos;
         $data['clientes']=$clientes;
+        //$data['STR_CLIENTE']=STR_CLIENTE;
         $data['cod_usuario']=$this->session->userdata('cod_usuario');
         
         $this->load->view('nuevatarea_view',$data);

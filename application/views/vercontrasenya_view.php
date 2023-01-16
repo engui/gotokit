@@ -19,7 +19,11 @@ include 'includes/headerContrasenyas.php';
                     	<td class="px-4 py-2" style="width: 75%;"><input class="form-control" name="nombreContrasenya" type="text" value="<?php echo $datos_contrasenyas->nombre; ?>"></td>
                 	</tr>
                 	<tr>
-                		<td>Clientes:</td>
+                		<td>
+						<?php
+                      		echo (ucfirst(STR_CLIENTE).'s:'); 
+                    	?>
+						</td>
                 		<td class="px-4 py-2">
                 			<select class="form-control" id="menuClientes" multiple="multiple" name="clientesContrasenya[]">
                             <?php

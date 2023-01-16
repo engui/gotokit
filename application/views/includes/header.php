@@ -160,7 +160,14 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Mantenimiento<span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li class="nav-item px-2">
-            <a class="nav-link" href="<?php echo base_url(); ?>mantenimiento_clientes">Cliente</a>
+            <a class="nav-link" href="
+              <?php 
+                echo base_url()."mantenimiento_".STR_CLIENTE."s";
+              ?>">
+              <?php
+                echo ucfirst(STR_CLIENTE);
+              ?>
+            </a>
           </li>
           <?php
             if($this->session->userdata('super')==1) 

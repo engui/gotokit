@@ -64,6 +64,7 @@ $route['crear-nuevo-conocimiento'] = "nuevoconocimiento_controller/nuevoConocimi
 $route['mantenimiento_clientes']="mantenimiento_clientes_controller";
 $route['mantenimiento_usuarios']="mantenimiento_usuarios_controller";
 $route['mantenimiento_etiquetas']="mantenimiento_etiquetas_controller";
+$route['mantenimiento_'.STR_CLIENTE.'s']="mantenimiento_clientes_controller";
 
 $route['prueba']="verconocimiento_controller/prueba";
 
@@ -98,6 +99,7 @@ $route['inicio/correcta']='nuevatarea_controller/irInicio';
 $route['configuracion'] = "configuracion_controller";
 
 $route['404_override'] = '';
+
 
 
 /* End of file routes.php */
